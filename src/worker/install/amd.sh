@@ -4,7 +4,7 @@ set -e
 
 # install dependencies
 source ./$(dirname "${BASH_SOURCE[0]}")/common.sh
-apt-get install -y automake make g++ unzip build-essential autoconf libtool pkg-config libgflags-dev libgtest-dev libc++-dev curl libcap-dev
+apt-get install -y automake make g++ unzip build-essential autoconf libtool pkg-config libgflags-dev libgtest-dev libc++-dev curl libcap-dev texlive-latex-extra
 
 # install grpc
 export GRPC_LIB_DIR=/usr/local/lib
@@ -19,17 +19,18 @@ make install
 echo ${GRPC_LIB_DIR} | tee /etc/ld.so.conf.d/grpc.conf
 
 # install RDC
-export RDC_LIB_DIR=/opt/rocm/rdc/lib
-git clone https://github.com/RadeonOpenCompute/rdc /opt/rdc ||:
-mkdir -p /opt/rdc/build
-cd /opt/rdc/build
-cmake -DROCM_DIR=/opt/rocm -DGRPC_ROOT="/usr/local" ..
-make -j
-make install
-cat > /etc/ld.so.conf.d/x86_64-librdc_client.conf <<EOF
-${GRPC_LIB_DIR}
-${GRPC_LIB_DIR}64
-${RDC_LIB_DIR}
-${RDC_LIB_DIR}64
-EOF
+# export RDC_LIB_DIR=/opt/rocm/rdc/lib
+# git clone -b rocm-5.1.3 https://github.com/RadeonOpenCompute/rdc /opt/rdc ||:
+# mkdir -p /opt/rdc/build
+# cd /opt/rdc/build
+# cmake -DROCM_DIR=/opt/rocm -DGRPC_ROOT="/usr/local" ..
+# make -j
+# make install
+# cat > /etc/ld.so.conf.d/x86_64-librdc_client.conf <<EOF
+# ${GRPC_LIB_DIR}
+# ${GRPC_LIB_DIR}64
+# ${RDC_LIB_DIR}
+# ${RDC_LIB_DIR}64
+# EOF
+sudo apt-get install rdc
 ldconfig
