@@ -150,8 +150,9 @@ if __name__ == '__main__':
         help='Enable profile metrics (Tensor Core,FP16,FP32,FP64 activity).'
              'Addition of profile metrics encurs additional overhead on computer nodes.')
     parser.add_argument(
-        'container',
+        '--container',
         action='store_true',
+        default=False,
         help='Deploy Moneo-worker into container.')
     parser.add_argument(
         '-f',
