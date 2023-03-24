@@ -7,7 +7,7 @@ if [ -n "$PUBLISHER_INSTALL" ];
 then
     if [ $PUBLISHER_INSTALL = true ];
     then
-        $(dirname "${BASH_SOURCE[0]}")/geneva.sh  $(dirname "${BASH_SOURCE[0]}")/config/geneva_config.json
+        sudo bash $(dirname "${BASH_SOURCE[0]}")/geneva.sh  $(dirname "${BASH_SOURCE[0]}")/config/geneva_config.json
     fi
 fi
 

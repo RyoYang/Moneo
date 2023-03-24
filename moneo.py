@@ -125,8 +125,14 @@ class MoneoCLI:
         else:
             print('-Running install on workers-')
             logging.info('Running install on workers')
-            out = pssh(cmd='/tmp/moneo-worker/install/install.sh',
-                       hosts_file=hosts_file, max_threads=max_threads, user=self.args.user)
+            cmd = '/tmp/moneo-worker/install/install.sh'
+            if self.args.launch_publisher:
+                print('-Install Geneva agent-')
+                logging.info('Install Geneva agent')
+                cmd = cmd + ' true'
+            else:
+                cmd = cmd + ' false'
+            out = pssh(cmd=cmd, hosts_file=hosts_file, max_threads=max_threads, user=self.args.user)
             logging.info(out)
             print('--------------------------')
         print('-Starting metric exporters on workers-')
@@ -138,6 +144,7 @@ class MoneoCLI:
         else:
             cmd = cmd + ' false'
         if self.args.launch_publisher:
+            print('-Geneva agent enabled-')
             logging.info('Geneva agent enabled')
             cmd = cmd + ' true'
         else:

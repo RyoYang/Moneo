@@ -68,6 +68,8 @@ check_min_dcgm_ver(){
 
 }
 
+sudo apt-get update \
+    && sudo apt-get install -y datacenter-gpu-manager
 
 # install DCGM
 if [[ $distro =~ "Ubuntu" ]]; then

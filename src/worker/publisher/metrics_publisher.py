@@ -84,6 +84,17 @@ def get_vm_id():
     vm_id = shell_cmd(cmd, 15).splitlines()[5]
     return vm_id
 
+def get_scaleset_name():
+    """
+    Get the scaleset name
+    Returns:
+        scaleset_name(str): The scaleset name
+    """
+    cmd = 'curl -H Metadata:true \
+    "http://169.254.169.254/metadata/instance/compute/name?api-version=2021-02-01&format=text"'
+    scaleset_name = shell_cmd(cmd, 15).splitlines()[5]
+    return scaleset_name.split("_")[0]
+
 class MetricsPublisher():
     """ MetricsPublisher is a class that using optl_exporter publishes metrics to Geneva"""
     def __init__(self, metrics_ports=None, metrics_account=None, metrics_namespace=None):
@@ -92,6 +103,7 @@ class MetricsPublisher():
         self.metrics_namespace = metrics_namespace
         self.node_name = socket.gethostname()
         self.vm_id = get_vm_id()
+        self.scaleset_name = get_scaleset_name()
         self.meter = get_optl_exporter_meter(self.metrics_account, self.metrics_namespace)
         self.metricNametoCounter = dict()
         self.metricNametoHistogram = dict()
@@ -203,6 +215,7 @@ class MetricsPublisher():
         tags = {}
         tags['node_name'] = self.node_name
         tags['vm_id'] = self.vm_id
+        tags['scaleset_name'] = self.scaleset_name
         for label in metric_labels:
             tags[label] = metric_labels[label]
         return tags
@@ -211,7 +224,7 @@ class MetricsPublisher():
 if __name__ == '__main__':
     metrics_ports = '8000,8001,8002'
     metrics_account = 'moneo'
-    metrics_namespace = 'MetricsPublisherV0'
+    metrics_namespace = 'MetricsPublisherV1'
     metricsPublisher = MetricsPublisher(
         metrics_ports=metrics_ports,
         metrics_account=metrics_account,
