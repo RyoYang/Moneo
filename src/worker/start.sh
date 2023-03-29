@@ -7,7 +7,7 @@ PROF_METRICS=$1
 START_PUBLISHER=$2
 
 #shutdown previous instances
-$WORK_DIR/shutdown.sh
+$WORK_DIR/shutdown.sh false
 
 # start exporters
 if [ -e "/dev/nvidiactl" ];
