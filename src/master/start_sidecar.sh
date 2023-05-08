@@ -30,4 +30,4 @@ sudo docker run --name=prometheus_sidecar \
     -it --net=host --uts=host -d \
     -e CLUSTER=$CLUSTER_NAME -e LISTENING_PORT=8081 \
     -e IDENTITY_TYPE=userAssigned -e AZURE_CLIENT_ID=$IDENTITY_CLIENT_ID \
-    -e INGESTION_URL=$INGESTION_ENDPOINT prom_sidecar
+    -e INGESTION_URL=$INGESTION_ENDPOINT prometheus_sidecar
