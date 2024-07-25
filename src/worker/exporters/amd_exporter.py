@@ -93,6 +93,7 @@ class RdcExporter(RdcReader):
                 'rdc_{}'.format(field_name),
                 ['gpu_id', 'gpu_uuid'],
             )
+        self.gauges['dummy_field'] = prometheus_client.Gauge('dummy_field', 'dummy_field', ['gpu_id', 'gpu_uuid'],)
 
     def handle_field(self, gpu_id, value):
         if value.field_id.value in self.gauges:
@@ -105,6 +106,10 @@ class RdcExporter(RdcReader):
                 rdc_config['device_uuid'][gpu_id],
                 self.rdc_util.field_id_string(value.field_id).lower(),
                 str(value.value.l_int))
+        self.gauges['dummy_field'].labels(
+            gpu_id,
+            rdc_config['device_uuid'][gpu_id],
+        ).set(1)
 
     def loop(self):
         try:

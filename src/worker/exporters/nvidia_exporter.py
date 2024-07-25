@@ -176,6 +176,7 @@ class DcgmExporter(DcgmReader):
                     'job_id'
                 ],
             )
+        self.m_gauges['dummy_field'] = prometheus_client.Gauge('dummy_field', 'dummy_field', ['gpu_id', 'gpu_uuid' if dcgm_config['sendUuid'] else 'gpu_bus_id', 'job_id'],)
 
     def InitCounterConfig(self):
         global dcgm_config
@@ -215,6 +216,11 @@ class DcgmExporter(DcgmReader):
                               gpuUniqueId, self.m_fieldIdToInfo[fieldId].tag,
                               str(val.value))
             logging.debug(','.join(gpu_line))
+            self.m_gauges['dummy_field'].labels(
+                gpuId,
+                gpuUniqueId,
+                dcgm_config['jobId']
+            ).set(1)
 
     def jobID_update_flag(self, signum, stack):
         '''Sets job update flag when user defined signal comes in'''
